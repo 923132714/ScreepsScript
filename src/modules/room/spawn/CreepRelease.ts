@@ -105,9 +105,15 @@ export default class RoomCreepReleaseController {
    */
   public processor(): OK | ERR_NOT_FOUND {
     const { room } = this.spawner;
-    if (!room.memory.center) return ERR_NOT_FOUND;
+    let x: number, y: number;
+    if (!room.memory.center) {
+      if (!room.memory.centerLinkId) return ERR_NOT_FOUND;
 
-    const [x, y] = room.memory.center;
+      const centerLink = Game.getObjectById(room.memory.centerLinkId);
+      [x, y] = [centerLink.pos.x, centerLink.pos.y];
+    } else {
+      [x, y] = room.memory.center;
+    }
     this.spawner.addTask({
       name: GetName.processor(room.name),
       role: "processor",

@@ -22,7 +22,20 @@ export const processor: CreepConfig<"processor"> = {
     if (creep.ticksToLive <= 5) return false;
     // 获取任务
     const task = creep.room.centerTransport.getTask();
-    if (!task) return false;
+    if (!task) {
+      // 快死了就准备后事
+      if (creep.ticksToLive <= 50) {
+        const roomName = creep.memory.spawnRoom;
+        if (
+          roomName &&
+          Game.rooms[roomName]?.energyAvailable > 500 &&
+          Game.rooms[roomName]?.spawner?.getTaskListLength() <= 0
+        )
+          creep.suicide();
+        creep.say("快死了");
+      }
+      return false;
+    }
 
     // 通过房间基础服务获取对应的建筑
     const structure = creep.room[task.source];
@@ -80,6 +93,8 @@ export const processor: CreepConfig<"processor"> = {
     else if (result === ERR_NOT_ENOUGH_RESOURCES) {
       creep.say(`取出资源`);
       return true;
+    } else if (result === ERR_NOT_IN_RANGE) {
+      creep.say(`不在范围内`);
     } else {
       creep.say(`存入 ${result}`);
       creep.room.centerTransport.hangTask();

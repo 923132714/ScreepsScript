@@ -68,6 +68,14 @@ export default class RoomSpawnController extends RoomAccessor<SpawnTask[]> {
   public hasTask(creepName: string): boolean {
     return !!this.memory.find(({ name }) => name === creepName);
   }
+  /**
+   * 获取当前孵化队列长度
+   *
+   * @returns 当前孵化队列长度
+   */
+  public getTaskListLength(): number {
+    return this.memory?.length;
+  }
 
   /**
    * 清空任务队列

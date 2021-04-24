@@ -35,6 +35,23 @@ const setHarvestMode = function (creep: Creep, source: Source): void {
 };
 
 /**
+ * 判断是否需要自杀
+ * @param creep 执行检查的单位
+ * @returns 是否需要自杀
+ */
+const needSuside = function (
+  creep: Creep<"harvester">
+): boolean{
+  if (
+    (creep.body.length < 15 || creep.ticksToLive < 50) &&
+    creep.room.energyAvailable > 1500 &&
+    creep.room.spawner.getTaskListLength() === 0
+  ) {
+    return true
+  }
+  return false
+}
+/**
  * 移动到 source 旁丢弃能量的位置
  * @param creep 执行移动的单位
  * @param source 目标
@@ -186,7 +203,11 @@ const actionStrategy: ActionStrategy = {
     target: creep => {
       const { sourceId } = creep.memory.data;
       creep.getEngryFrom(Game.getObjectById(sourceId));
-
+      // 避免 energy 采不完的情况
+      if (needSuside(creep) ) {
+        creep.drop(RESOURCE_ENERGY);
+        creep.suicide();
+      }
       // 快死了就把身上的能量丢出去，这样就会存到下面的 container 里，否则变成墓碑后能量无法被 container 自动回收
       if (creep.ticksToLive < 2) creep.drop(RESOURCE_ENERGY);
       return false;
@@ -222,12 +243,18 @@ const actionStrategy: ActionStrategy = {
           } else creep.memory.regenSource = Game.time + 1000;
         }
       }
-
+      // 避免 energy 采不完的情况
+      if (needSuside(creep)) {
+        return true
+      }
       // 快死了就把能量移出去
       return creep.ticksToLive < 2;
     },
     target: creep => {
-      if (creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0) return true;
+      if (creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0) {
+        if(needSuside(creep))creep.suicide();
+        return true;
+      }
 
       const target = Game.getObjectById(creep.memory.targetId as Id<StructureLink>) || creep.room.storage;
 
