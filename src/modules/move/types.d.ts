@@ -53,6 +53,10 @@ interface MoveOpt {
  */
 interface MoveInfo {
   /**
+   * 最后一次允许对穿的对象名，用于避免无限循环让路
+   */
+  LastCross?: string;
+  /**
    * 序列化之后的路径信息
    */
   path?: string;

@@ -6,8 +6,13 @@
  * @param creep 被对穿的 creep
  * @param requireCreep 发起对穿的 creep
  */
-const defaultRule: AllowCrossRuleFunc = (creep, requireCreep) =>
-  !(creep.memory.stand && requireCreep.memory.role === creep.memory.role);
+const defaultRule: AllowCrossRuleFunc = (creep, requireCreep) =>{
+  if (creep.memory.moveInfo?.LastCross !== undefined && creep.memory.moveInfo?.LastCross === requireCreep.name) {
+    delete creep.memory.moveInfo.LastCross;
+    return false;
+  }
+  return !(creep.memory.stand && requireCreep.memory.role === creep.memory.role);
+}
 
 /**
  * 简单对穿规则：工作时不允许对穿

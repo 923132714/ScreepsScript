@@ -59,7 +59,9 @@ export class Cross {
       // 同意对穿
       creep.say("👌");
       const moveResult = creep.move(direction);
-      if (moveResult === OK && creep.memory.moveInfo?.path?.length > 0) {
+      if (moveResult === OK && creep.memory.moveInfo?.path?.length > 0  ) {
+        // 记录对穿creepName 用于避免原地重复对穿
+        creep.memory.moveInfo.LastCross = requireCreep.name;
         // 如果移动的方向不是路径中的方向的话，就重新寻路
         if ((Number(creep.memory.moveInfo.path[0]) as DirectionConstant) !== direction) {
           delete creep.memory.moveInfo.path;
