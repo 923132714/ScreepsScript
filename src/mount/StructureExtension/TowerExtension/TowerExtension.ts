@@ -1,4 +1,4 @@
-import { MAX_WALL_HITS, TOWER_FILL_WALL_LEVEL, repairSetting } from "@/setting";
+import { MAX_WALL_HITS, TOWER_FILL_WALL_LEVEL, repairSetting, TOWER_DAILY_WORK_LIMIT } from "@/setting";
 import { whiteListFilter } from "@/utils/global/whiteListFilter";
 
 // Tower 原型拓展
@@ -42,6 +42,8 @@ export default class TowerExtension extends StructureTower {
     // 找不到敌人再维修建筑
     else if (this.commandRepair()) {
       // PASS
+    }else if (this.store.getUsedCapacity[RESOURCE_ENERGY] <= TOWER_DAILY_WORK_LIMIT) {
+      //PASS
     }
     // 找不到要维修的建筑就刷墙
     else if (this.room.controller.level > TOWER_FILL_WALL_LEVEL && this.commandFillWall()) {

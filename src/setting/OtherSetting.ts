@@ -72,3 +72,9 @@ export const maxOps = 50000;
  * 当 terminal 中的资源多余这个值时，miner 将不再继续采矿
  */
 export const MINE_LIMIT = 200000;
+
+/**
+ * Tower 日常工作最低能量
+ * 当 Tower 中的能量低于这个值时，Tower 将不再进行 dailyWork
+ */
+export const TOWER_DAILY_WORK_LIMIT = 300;
