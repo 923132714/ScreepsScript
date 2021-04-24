@@ -18,7 +18,7 @@ export const creepDefaultMemory: CreepMemory = {
  */
 export const BASE_ROLE_LIMIT: RoomBaseUnitLimit = {
   worker: {
-    MAX: 20,
+    MAX: 10,
     MIN: 1
   },
   manager: {
