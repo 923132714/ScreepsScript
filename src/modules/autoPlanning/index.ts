@@ -1,4 +1,5 @@
 import { LEVEL_BUILD_RAMPART, LEVEL_BUILD_ROAD } from "@/setting";
+import { addBuildTask } from "@/modules/room/task/work/delayTask";
 import { addConstructionSite } from "@/modules/ConstructionController";
 import planBase from "./planBase";
 import planRoad from "./planRoad";
@@ -74,7 +75,7 @@ const clearStructure = function (room: Room): OK | ERR_NOT_FOUND {
 const mergeStructurePlan = function (
   origin: StructurePlanningResult,
   newData: RoomPosition[],
-  level: AvailableLevel,
+  level: AllRoomControlLevel,
   type: BuildableStructureConstant
 ): OK {
   // 先取出已经存在的道路
@@ -113,7 +114,7 @@ const planStaticStructure = function (room: Room): ERR_NOT_FOUND | StructurePlan
       // 如果 LEVEL_BUILD_RAMPART 设置的太高会导致超过 8 级，这里检查下
       if (placeLevel > 8) placeLevel = 8;
 
-      mergeStructurePlan(result, walls, placeLevel as AvailableLevel, STRUCTURE_RAMPART);
+      mergeStructurePlan(result, walls, placeLevel as AllRoomControlLevel, STRUCTURE_RAMPART);
     });
   }
 
@@ -121,7 +122,7 @@ const planStaticStructure = function (room: Room): ERR_NOT_FOUND | StructurePlan
   const roadPos = planRoad(room, centerPos, result);
 
   roadPos.forEach((roads, index) => {
-    mergeStructurePlan(result, roads, LEVEL_BUILD_ROAD[index] as AvailableLevel, STRUCTURE_ROAD);
+    mergeStructurePlan(result, roads, LEVEL_BUILD_ROAD[index] as AllRoomControlLevel, STRUCTURE_ROAD);
   });
 
   return result;
@@ -185,7 +186,7 @@ export const manageStructure = function (room: Room): OK | ERR_NOT_OWNER | ERR_N
       }));
       addConstructionSite(sitePosList);
       // 发布建造任务
-      room.work.updateTask({ type: "build", priority: 9 }, { dispath: true });
+      addBuildTask(room.name);
     });
   }
 

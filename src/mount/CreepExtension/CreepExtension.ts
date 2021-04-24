@@ -27,7 +27,7 @@ export class CreepExtension extends Creep {
       const memory = getMemoryFromCrossShard(this.name);
       // console.log(`${this.name} 从暂存区获取了内存`, memory)
       if (!memory) {
-        this.log(`找不到对应的 creepConfig`, "yellow");
+        this.log(`找不到对应内存`, "yellow");
         this.say("我凉了！");
         return;
       }
@@ -136,6 +136,18 @@ export class CreepExtension extends Creep {
   }
 
   /**
+   * 切换为能量获取状态
+   * 应在 target 阶段能量不足时调用
+   *
+   * @returns boolean
+   */
+  public backToGetEnergy(): boolean {
+    // 移除能量来源缓存，便于重新查找最近的
+    delete this.memory.sourceId;
+    return true;
+  }
+
+  /**
    * 转移资源到建筑
    * 包含移动逻辑
    *
@@ -143,7 +155,11 @@ export class CreepExtension extends Creep {
    * @param RESOURCE 要转移的资源类型
    * @param moveOpt 移动参数
    */
-  public transferTo(target: Structure, RESOURCE: ResourceConstant, moveOpt: MoveOpt = {}): ScreepsReturnCode {
+  public transferTo(
+    target: AnyCreep | Structure,
+    RESOURCE: ResourceConstant,
+    moveOpt: MoveOpt = {}
+  ): ScreepsReturnCode {
     this.goTo(target.pos, moveOpt);
     return this.transfer(target, RESOURCE);
   }
@@ -151,19 +167,15 @@ export class CreepExtension extends Creep {
   /**
    * 填充本房间的 controller
    */
-  public upgrade(): ScreepsReturnCode {
-    const result = this.upgradeController(this.room.controller);
-
-    if (this.memory.role === "gclUpgrader") {
-      const upgradePos: RoomPosition = this.room.controller.getUpgradePos(this);
-
-      if (upgradePos && (this.pos.x !== upgradePos.x || this.pos.y !== upgradePos.y)) {
-        this.goTo(upgradePos);
-      }
-    } else if (result === ERR_NOT_IN_RANGE) {
-      this.goTo(this.room.controller.pos);
+  public upgradeRoom(roomName: string): ScreepsReturnCode {
+    const workRoom = Game.rooms[roomName];
+    if (!workRoom) {
+      this.goTo(new RoomPosition(25, 25, roomName), { checkTarget: false });
+      return ERR_NOT_IN_RANGE;
     }
+    const result = this.upgradeController(workRoom.controller);
 
+    if (result === ERR_NOT_IN_RANGE) this.goTo(workRoom.controller.pos);
     return result;
   }
 
@@ -202,6 +214,8 @@ export class CreepExtension extends Creep {
           (structure.structureType === STRUCTURE_WALL || structure.structureType === STRUCTURE_RAMPART)
         ) {
           this.memory.fillWallId = structure.id as Id<StructureWall | StructureRampart>;
+          // 同时发布刷墙任务
+          this.room.work.updateTask({ type: "fillWall", priority: 0 });
         }
 
         delete this.memory.constructionSiteId;

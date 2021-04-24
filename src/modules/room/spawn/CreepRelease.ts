@@ -96,8 +96,26 @@ export default class RoomCreepReleaseController {
     room.memory[memoryKey] = oldNumber + realAdjust;
 
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    room.log(`调整 ${type} 单位数量 [修正] ${realAdjust} [修正后数量] ${room.memory[memoryKey]}`);
+    room.log(
+      `调整 ${type} 单位数量 [修正] ${realAdjust} [上/下限] ${MAX}/${MIN}[修正后数量] ${room.memory[memoryKey]}`
+    );
     return OK;
+  }
+
+  /**
+   * 设置基地运维角色数量
+   *
+   * @param type 要设置的单位角色
+   * @param limit 设置的限制
+   */
+  public setBaseUnitLimit(type: BaseUnits, limit: Partial<BaseUnitLimit>): void {
+    // 获取当前房间的设置
+    const existLimit =
+      (JSON.parse(this.spawner.room.memory.baseUnitLimit || "{}") as RoomBaseUnitLimit) || BASE_ROLE_LIMIT;
+    // 更新配置
+    const realLimit = _.defaults(limit, existLimit[type], BASE_ROLE_LIMIT[type]);
+    // 把新配置覆写保存进内存
+    this.spawner.room.memory.baseUnitLimit = JSON.stringify(_.defaults(existLimit, { [type]: realLimit }, existLimit));
   }
 
   /**
