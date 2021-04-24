@@ -13,6 +13,7 @@
     "push-main": "rollup -c rollup.config.ts --environment DEST:main",
     "push-pserver": "rollup -c rollup.config.ts --environment DEST:pserver",
     "push-sim": "rollup -c rollup.config.ts --environment DEST:sim",
+    "push-sim2": "rollup -c rollup.config.ts --environment DEST:sim2",
     "push-season": "rollup -c rollup.config.ts --environment DEST:season",
     "test": "npm run test-unit && npm run test-integration ",
     "test-unit": "jest test/unit",
