@@ -123,7 +123,8 @@ export default class RoomCreepReleaseController {
    */
   public processor(): OK | ERR_NOT_FOUND {
     const { room } = this.spawner;
-    let x: number, y: number;
+    let x: number;
+    let y: number;
     if (!room.memory.center) {
       if (!room.memory.centerLinkId) return ERR_NOT_FOUND;
 
