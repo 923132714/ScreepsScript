@@ -235,14 +235,16 @@ const actionStrategy: ActionStrategy = {
         return false;
       }
 
-      const { x: sourceX, y: sourceY } = source.pos;
-      const { x: linkX, y: linkY } = link.pos;
+      // const { x: sourceX, y: sourceY } = source.pos;
+      // const { x: linkX, y: linkY } = link.pos;
 
       // 移动到 link 和 source 相交的位置，这样不用移动就可以传递能量
-      const targetPos = new RoomPosition(Math.max(sourceX, linkX) - 1, Math.max(sourceY, linkY) - 1, source.room.name);
-      creep.goTo(targetPos, { range: 0 });
+      //  const targetPos = new RoomPosition(Math.max(sourceX, linkX) - 1, Math.max(sourceY, linkY) - 1, source.room.name);
 
-      return creep.pos.isEqualTo(targetPos);
+      creep.goTo(source.pos, { range: 1 });
+
+      // return creep.pos.isEqualTo(targetPos);
+      return true;
     },
     source: (creep, source) => {
       if (creep.store.getFreeCapacity(RESOURCE_ENERGY) === 0) return true;
