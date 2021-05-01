@@ -202,12 +202,13 @@ const actionStrategy: ActionStrategy = {
      */
     source: creep => {
       const { sourceId } = creep.memory.data;
-      creep.getEngryFrom(Game.getObjectById(sourceId));
+      creep.getEnergyFrom(Game.getObjectById(sourceId));
       // 避免 energy 采不完的情况
       if (needSuside(creep)) {
         creep.drop(RESOURCE_ENERGY);
         creep.suicide();
       }
+
       // 快死了就把身上的能量丢出去，这样就会存到下面的 container 里，否则变成墓碑后能量无法被 container 自动回收
       if (creep.ticksToLive < 2) creep.drop(RESOURCE_ENERGY);
       return false;
@@ -249,7 +250,7 @@ const actionStrategy: ActionStrategy = {
     source: (creep, source) => {
       if (creep.store.getFreeCapacity(RESOURCE_ENERGY) === 0) return true;
 
-      creep.getEngryFrom(source);
+      creep.getEnergyFrom(source);
 
       if (source.energy < source.energyCapacity / 2) {
         // 如果满足下列条件就重新发送 regen_source 任务
