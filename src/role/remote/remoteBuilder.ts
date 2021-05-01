@@ -9,6 +9,7 @@ import remoteHelperIsNeed from "@/utils/creep/remoteHelperIsNeed";
  * 如果都造好的话就升级控制器
  */
 export const remoteBuilder: CreepConfig<"remoteBuilder"> = {
+  ...inPlaceBase(),
   isNeed: (room, preMemory) => {
     const { targetRoomName } = preMemory.data;
     const target = Game.rooms[targetRoomName];

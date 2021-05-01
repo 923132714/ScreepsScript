@@ -1,11 +1,13 @@
 import { bodyConfigs } from "@/setting";
 import createBodyGetter from "@/utils/creep/createBodyGetter";
+import { inPlaceBase } from "@/utils/creep/inPlaceBase";
 
 /**
  * 外矿采集者
  * 从指定矿中挖矿 > 将矿转移到建筑中
  */
 export const remoteHarvester: CreepConfig<"remoteHarvester"> = {
+  ...inPlaceBase(),
   // 如果外矿目前有入侵者就不生成
   isNeed: (room, preMemory) => {
     const { sourceFlagName } = preMemory.data;
