@@ -11,6 +11,9 @@
  * @param roomName 房间名
  */
 export function initRoomStats(roomName: string): void {
+  if (!Memory.stats) {
+    Memory.stats = { rooms: {} };
+  }
   if (!Memory.stats.rooms[roomName]) {
     Memory.stats.rooms[roomName] = {
       nukerEnergy: 0,
@@ -59,6 +62,9 @@ export function clearRoomStats(roomName: string): void {
  * @param roomName 要获取统计的房间名
  */
 export function getRoomStats(roomName: string): RoomStats {
+  if (!Memory.stats.rooms[roomName]) {
+    initRoomStats(roomName);
+  }
   return Memory.stats.rooms[roomName];
 }
 
