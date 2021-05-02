@@ -73,6 +73,7 @@ export default class RoomCreepReleaseController {
     else if (oldNumber + adjust >= MIN) realAdjust = adjust;
     // 调整值导致人数不够了，根据最小值调整
     else realAdjust = MIN - oldNumber;
+
     if (realAdjust >= 0) {
       // 添加新的单位
       for (let i = 0; i < oldNumber + realAdjust; i++) {
@@ -95,9 +96,10 @@ export default class RoomCreepReleaseController {
     room.memory[memoryKey] = oldNumber + realAdjust;
 
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    room.log(
-      `调整 ${type} 单位数量 [修正] ${realAdjust} [上/下限] ${MAX}/${MIN}[修正后数量] ${room.memory[memoryKey]}`
-    );
+    if (realAdjust !== 0)
+      room.log(
+        `调整 ${type} 单位数量 [修正] ${realAdjust} [上/下限] ${MAX}/${MIN}[修正后数量] ${room.memory[memoryKey]}`
+      );
     return OK;
   }
 

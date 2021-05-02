@@ -2,10 +2,10 @@ import { BOOST_RESOURCE, boostEnergyReloadLimit, boostResourceReloadLimit } from
 import { confirmBasePos, findBaseCenterPos, setBaseCenter } from "@/modules/autoPlanning/planBasePos";
 import { GetName } from "@/modules/room/spawn/nameGetter";
 import createRoomLink from "@/utils/console/createRoomLink";
+import { initRoomStats } from "@/modules/stats";
 import log from "@/utils/console/log";
 import { manageStructure } from "@/modules/autoPlanning";
 import { removeCreep } from "@/modules/creep/utils";
-import { initRoomStats } from "@/modules/stats";
 
 export default class RoomExtension extends Room {
   /**
