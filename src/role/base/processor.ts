@@ -10,7 +10,7 @@ export const processor: CreepConfig<"processor"> = {
   prepare: creep => {
     const { x, y } = creep.memory.data;
 
-    if (creep.pos.isEqualTo(x, y)) return true;
+    if (creep.pos.x - x + creep.pos.y - y <= 1) return true;
     else {
       creep.goTo(new RoomPosition(x, y, creep.room.name), { range: 0, checkTarget: false });
       return false;
