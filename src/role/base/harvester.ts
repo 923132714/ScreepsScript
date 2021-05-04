@@ -208,7 +208,6 @@ const actionStrategy: ActionStrategy = {
         creep.drop(RESOURCE_ENERGY);
         creep.suicide();
       }
-
       // 快死了就把身上的能量丢出去，这样就会存到下面的 container 里，否则变成墓碑后能量无法被 container 自动回收
       if (creep.ticksToLive < 2) creep.drop(RESOURCE_ENERGY);
       return false;
