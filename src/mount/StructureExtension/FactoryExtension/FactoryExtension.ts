@@ -222,7 +222,7 @@ export default class FactoryExtension extends StructureFactory {
               // 不在黑名单里就尝试自己合成
               if (FactoryExtension.inBlacklist(resType as ResourceConstant)) {
                 this.handleInsufficientResource(resType as ResourceConstant, needAmount);
-                this.log(`发现底物不足，进行拆分：${resType} ${needAmount}`, "yellow", true);
+                this.log(`发现底物不足，进行拆分：${resType} ${needAmount}`, "yellow", false);
               }
               // 缺少的是基础资源，等一等
               else this.gotoBed(100, `缺少 ${resType}*${needAmount}`);

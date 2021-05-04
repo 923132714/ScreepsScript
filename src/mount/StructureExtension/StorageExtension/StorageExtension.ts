@@ -22,6 +22,9 @@ export default class StorageExtension extends StructureStorage {
       if (this.room.terminal.store[RESOURCE_ENERGY] > 30000) this.room.terminal.energyCheck();
       else this.room.share.request(RESOURCE_ENERGY, 50000);
     }
+    if (this.store[RESOURCE_ENERGY] <= 100000) {
+      this.log(`${this.room.name}能量不足，当前只剩 ${this.store[RESOURCE_ENERGY]}`, "yellow", true);
+    }
 
     this.energyKeeper();
 
