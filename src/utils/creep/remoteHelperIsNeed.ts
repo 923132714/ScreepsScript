@@ -8,6 +8,7 @@
 export default function remoteHelperIsNeed(source: Room, target: Room, customCondition: () => boolean): boolean {
   // 源房间没视野就默认孵化
   if (!target) return true;
+  if (target[STRUCTURE_SPAWN].length <= 0) return true;
 
   if (
     // 判断自定义条件
