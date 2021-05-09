@@ -1,4 +1,5 @@
 import { getMockRoom } from "@mock/RoomMock";
+import { getMockSpawn } from "@mock/SpawnMock";
 import { getMockStructureController } from "@mock/StructureControllerMock";
 import { getMockStructureSpawn } from "@mock/StructureSpawnMock";
 import remoteHelperIsNeed from "@/utils/creep/remoteHelperIsNeed";
@@ -13,7 +14,7 @@ describe("remoteHelperIsNeed", () => {
 
   it("customCondition 结果为 true 时返回 false", () => {
     const sourceRoom = getMockRoom({ name: "sourceRoom" });
-    const targetRoom = getMockRoom({ name: "targetRoom" });
+    const targetRoom = getMockRoom({ name: "targetRoom", [STRUCTURE_SPAWN]: [getMockSpawn()] });
     const result = remoteHelperIsNeed((sourceRoom as unknown) as Room, (targetRoom as unknown) as Room, () => true);
     expect(result).toBeFalsy();
   });
