@@ -19,9 +19,6 @@ export default class ControllerExtension extends StructureController {
     // 如果等级发生变化了就运行 creep 规划
     if (this.stateScanner()) this.onLevelChange(this.level);
 
-    // 调整运营 creep 数量
-    if (Game.time % 300) this.adjustCreep();
-
     // 检查外矿有没有被入侵的，有的话是不是可以重新发布 creep
     if (this.room.memory.remote) {
       for (const remoteRoomName in this.room.memory.remote) {
@@ -32,6 +29,9 @@ export default class ControllerExtension extends StructureController {
         }
       }
     }
+    // 调整运营 creep 数量
+    if (Game.time % 300) return;
+    this.adjustCreep();
   }
 
   /**

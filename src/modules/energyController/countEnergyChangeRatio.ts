@@ -14,7 +14,7 @@ export const countEnergyChangeRatio = function (room: Room, withLimit = false): 
   }
 
   // 收集房间建筑内的可用总能量
-  const structureEnergy = [room.terminal, room.storage, ...room[STRUCTURE_CONTAINER], ...room[STRUCTURE_LINK]]
+  const structureEnergy = [room.terminal, room.storage, ...room[STRUCTURE_CONTAINER]]
     .filter(Boolean)
     // 拿到需要进行统计的能量数量
     .map(structure => {
@@ -39,9 +39,9 @@ export const countEnergyChangeRatio = function (room: Room, withLimit = false): 
       }
       return energy.amount;
     });
-
   // 计算能量总数
   const totalEnergy = [...structureEnergy, ...droppedEnergy].reduce((pre, next) => pre + next, 0);
+
   let energyGetRate: number;
   setRoomStats(room.name, oldStats => {
     // 计算能量获取速率，如果 energyGetRate 为 NaN 的话代表之前还未进行过统计，先设置为 0

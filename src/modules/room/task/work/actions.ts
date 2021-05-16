@@ -105,6 +105,12 @@ export const transportActions: {
     source: () => getEnergy(creep),
     target: () => {
       const { workRoom: workRoomName } = creep.memory.data;
+      if (
+        Game.rooms[workRoomName].controller.level === 8 &&
+        Game.rooms[workRoomName].controller.ticksToDowngrade >= 10000 &&
+        Game.rooms[workRoomName].storage.store[RESOURCE_ENERGY] < 300000
+      )
+        return false;
 
       if (creep.upgradeRoom(workRoomName) === ERR_NOT_ENOUGH_RESOURCES) {
         return creep.backToGetEnergy();

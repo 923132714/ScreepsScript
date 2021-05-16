@@ -11,8 +11,8 @@ import TaskController from "../BaseTaskController";
  * @property {} expect 对应的期望
  */
 const WORK_PROPORTION_TO_EXPECT = [
-  { rate: 20, expect: 2 },
-  { rate: 5, expect: 1 },
+  { rate: 30, expect: 2 },
+  { rate: 10, expect: 1 },
   { rate: -0, expect: 0 },
   { rate: -5, expect: -2 },
   { rate: -10, expect: -3 }
