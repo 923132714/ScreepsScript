@@ -167,7 +167,7 @@ export default class ControllerExtension extends StructureController {
    * 根据房间情况调整运营单位的数量
    */
   private adjustCreep(): void {
-    this.room.spawner.release.changeBaseUnit("manager", this.room.transport.getExpect());
+    // this.room.spawner.release.changeBaseUnit("manager", this.room.transport.getExpect());
     // 先更新房间能量使用情况，然后根据情况调整期望
     const energyGetRate = countEnergyChangeRatio(this.room, true);
     const workerChange = this.room.work.getExpect(energyGetRate);
