@@ -159,10 +159,16 @@ export const actions: {
       if (typeof task.from === "string") {
         // 获取目标建筑
         const targetStructure = Game.getObjectById(task.from);
+
         if (!targetStructure) transport.removeTask(task.key);
 
-        // 检查下有没有资源
-        const resAmount = targetStructure.store[task.resourceType];
+        let resAmount;
+        if (targetStructure instanceof Resource) {
+          resAmount = targetStructure.amount;
+        } else {
+          // 检查下有没有资源
+          resAmount = targetStructure.store[task.resourceType];
+        }
         if (!resAmount) {
           // 如果任务有结束条件的话就结束，没有就等会
           if (task.endWith && task.endWith === "clear") {
@@ -171,11 +177,16 @@ export const actions: {
           } else creep.say("😁搬完了");
           return false;
         }
-
         // 移动到目的地，获取资源
         creep.goTo(targetStructure.pos);
         if (task.endWith) transport.countWorkTime();
-        const result = creep.withdraw(targetStructure, task.resourceType);
+
+        let result;
+        if (targetStructure instanceof Resource) {
+          result = creep.pickup(targetStructure);
+        } else {
+          result = creep.withdraw(targetStructure, task.resourceType);
+        }
         return result === OK;
       }
       // 是位置，尝试捡一下
